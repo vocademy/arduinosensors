@@ -73,26 +73,26 @@ void loop(){
         digitalWrite(counter, HIGH);
       }
       break;
-      case 621 ... 723:
+    case 621 ... 723:
       for(counter=firstLedPin; counter<=firstLedPin+6; counter++){
         digitalWrite(counter, HIGH);
       }
-     break;
-     case 724 ... 806:
+      break;
+    case 724 ... 806:
       for(counter=firstLedPin; counter<=firstLedPin+7; counter++){
         digitalWrite(counter, HIGH);
       }
-    break;
-     case 807 ... 908:
+      break;
+    case 807 ... 908:
       for(counter=firstLedPin; counter<=firstLedPin+8; counter++){
         digitalWrite(counter, HIGH);
       }
-     break;
-     case 909 ... 1024:
+      break;
+    case 909 ... 1024:
       for(counter=firstLedPin; counter<=firstLedPin+9; counter++){
         digitalWrite(counter, HIGH);
       }
-     default:
+      default:
       break;
   } //End of switch statement
  } //End of the function driveBarGraphUsingSwitch()
