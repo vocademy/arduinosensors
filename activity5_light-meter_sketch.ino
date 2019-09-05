@@ -1,22 +1,98 @@
-/* Uses a Passive Infrared Sensor (PIR) to detect motion.
- * When motion is detected, the sensor will send 3 volts to the sensor pin. (3Volts is considered high by 5Volt Arduinos)
- * This will cause an LED to light up.
+/* Reads the value of a LDR on A0 and displays the brightness level across a 10 LED bard graph
+ * Assumes that all 10 LEDs on the graph are connected on sequential Arduino digital pins.
+ * 
+ * Contains three functions showing three different decision making methods. Remove the comment next to the function you want to use.
+ * Be sure that the other two function calls in the loop() are commented out.
+ * 
+ * Written by Brian Cox 4/28/2019
  */
-const int LEDPIN = 9;        //Set pin for LED
-const int SENSORPIN = 12;    //Set pin for PIR sensor
-int sensorState = 0;            //Variable to record the state of the PIR sensor
 
-void setup() {
-  pinMode(LEDPIN, OUTPUT);     //Set pin for LED as output
-  pinMode(SENSORPIN, INPUT);   //Set pin for PIR sensor as input
-}
+int firstLedPin = 2;  // The Arduino pin for the first LED in the bar graph.
+int lastLedPin = 11;  // The Arduino pin for the last LED in the bar graph.
+int sensorPin = 0;   // The Arduino pin receiving input from the LDR.
+int sensorValue = 0;  // This varible will store the reading from the LDR. 
+int counter;          // This will be used as a loop counter.
 
-void loop() {
-  sensorState = digitalRead(SENSORPIN); //Read the state of the sensor pin
-  
-  if (sensorState == HIGH){             //Cause the LED to glow if the sensor pin is high.  Otherwise, turn the LED off.
-    digitalWrite(LEDPIN, HIGH);
-  } else {
-    digitalWrite(LEDPIN, LOW);
+// the setup routine runs once when you press reset:
+void setup() { 
+  //Set the 10 LED pins as outputs.
+  for(int counter=firstLedPin; counter<=lastLedPin; counter++){
+    pinMode(counter,OUTPUT);
   }
 }
+
+// the loop routine runs over and over again forever:
+void loop(){
+  driveBarGraphUsingSwitch();
+  delay(10); // Adds a delay of 10 ms to provide stability. Remember that the LEDs are turned off at the beginning of a loop. This ensures they will stay on for 10ms.
+}
+
+
+/* driveBarGraphUsingSwitch()                                                                 
+ * This function uses a switch statement to drive the LED bard graph. 
+ * This is an efficient design becuase is only makes a decision once and then runs the proper statements.
+ */ 
+
+ void driveBarGraphUsingSwitch(){
+  //Turn all LEDs off
+  for(counter=firstLedPin; counter<=lastLedPin+1; counter++){
+    digitalWrite(counter, LOW);
+  }
+  // read the input on analog pin 0:
+  int sensorValue = analogRead(sensorPin);
+  
+  // Activate the appropriate number of LEDs in the bar graph based on the value on A0. (The range is 0 to 1023)
+  // Considering that there are 10 LEDs in the bar graph, and there are 1024 possible numbers for the input: (1024 / 10 = 102.4) each increment will be 102.
+  
+  switch(sensorValue){
+    case 50 ... 104:        //In order to ensure that all LEDs are off if it is relatively dark, the lowest value that triggers an LED is 50.
+      digitalWrite(firstLedPin, HIGH);
+      break;
+    case 105 ... 207:
+      for(counter=firstLedPin; counter<=firstLedPin+1; counter++){
+        digitalWrite(counter, HIGH);
+      }
+      break;
+    case 208 ... 310:
+      for(counter=firstLedPin; counter<=firstLedPin+2; counter++){
+        digitalWrite(counter, HIGH);
+      }
+      break;
+    case 311 ... 414:
+      for(counter=firstLedPin; counter<=firstLedPin+3; counter++){
+        digitalWrite(counter, HIGH);
+      }
+      break;
+    case 415 ... 517:
+      for(counter=firstLedPin; counter<=firstLedPin+4; counter++){
+        digitalWrite(counter, HIGH);
+      }
+      break;
+    case 518 ... 620:
+      for(counter=firstLedPin; counter<=firstLedPin+5; counter++){
+        digitalWrite(counter, HIGH);
+      }
+      break;
+      case 621 ... 723:
+      for(counter=firstLedPin; counter<=firstLedPin+6; counter++){
+        digitalWrite(counter, HIGH);
+      }
+     break;
+     case 724 ... 806:
+      for(counter=firstLedPin; counter<=firstLedPin+7; counter++){
+        digitalWrite(counter, HIGH);
+      }
+    break;
+     case 807 ... 908:
+      for(counter=firstLedPin; counter<=firstLedPin+8; counter++){
+        digitalWrite(counter, HIGH);
+      }
+     break;
+     case 909 ... 1024:
+      for(counter=firstLedPin; counter<=firstLedPin+9; counter++){
+        digitalWrite(counter, HIGH);
+      }
+     default:
+      break;
+  } //End of switch statement
+ } //End of the function driveBarGraphUsingSwitch()
